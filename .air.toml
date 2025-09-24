@@ -1,0 +1,17 @@
+[project]
+root = "."
+tmp_dir = "tmp"
+
+
+[build]
+
+cmd = "go build -o ./tmp/main.exe ."
+bin = "./tmp/main.exe"
+
+[log]
+ time = true
+ silent = false
+
+ [color]
+ main="magenta"
+ watcher="cyan"
