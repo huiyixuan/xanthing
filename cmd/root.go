@@ -28,6 +28,8 @@ func init() {
 	redisS := service.RedisS{}
 	redisS.Init()
 
+	service.InitMysql("mysql")
+
 	rootCmd.AddCommand([]*cobra.Command{
 		server.Cmd,
 		shell.Cmd,

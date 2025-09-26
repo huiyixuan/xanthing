@@ -19,6 +19,7 @@ type Message struct {
 	MsgType      string `xml:"MsgType"`
 	Content      string `xml:"Content"`
 	MsgId        string `xml:"MsgId"`
+	PicUrl       string `xml:"PicUrl"`
 }
 
 func (o *Official) GetAccessToken() {
