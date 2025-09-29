@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"time"
+	"xanthing/internal/model"
 	"xanthing/internal/service"
 	"xanthing/pkg/wechat"
 
@@ -34,6 +35,7 @@ func (ctl *WeixinCtl) PublicCallback(c *gin.Context) {
 			fmt.Println(string(body))
 			if err != nil {
 				c.String(400, "error:"+err.Error())
+				return
 			}
 			message, err := official.ParseXml(string(body))
 			if err != nil {
@@ -54,18 +56,19 @@ func (ctl *WeixinCtl) PublicCallback(c *gin.Context) {
 			eventDate := t.Format("20060101")
 
 			now := time.Now()
-			insertMsg := map[string]interface{}{
-				"event_date":  eventDate,
-				"from_user":   message.FromUserName,
-				"to_user":     message.ToUserName,
-				"content":     message.Content,
-				"msg_type":    message.MsgType,
-				"msg_id":      message.MsgId,
-				"pic_url":     message.PicUrl,
-				"add_time":    now.Unix(),
-				"update_time": now.Unix(),
+			weixinOfficialMessage := model.WeixinOfficialMessage{
+				EventDate:  eventDate,
+				FromUser:   message.FromUserName,
+				ToUser:     message.ToUserName,
+				Content:    message.Content,
+				PicUrl:     message.PicUrl,
+				AddTime:    now.Unix(),
+				UpdateTime: now.Unix(),
+				Body:       string(body),
+				MsgType:    message.MsgType,
+				MsgId:      message.MsgId,
 			}
-			db.Table("weixin_official_message").Create(&insertMsg)
+			db.Table("weixin_official_message").Create(&weixinOfficialMessage)
 
 			c.String(200, "success")
 

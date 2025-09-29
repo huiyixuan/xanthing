@@ -4,6 +4,8 @@ import (
 	"os"
 	"xanthing/cmd/server"
 	"xanthing/cmd/shell"
+	"xanthing/cmd/task"
+	"xanthing/cmd/worker"
 	"xanthing/internal/service"
 
 	"github.com/spf13/cobra"
@@ -33,5 +35,7 @@ func init() {
 	rootCmd.AddCommand([]*cobra.Command{
 		server.Cmd,
 		shell.Cmd,
+		task.Cmd,
+		worker.Cmd,
 	}...)
 }
