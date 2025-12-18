@@ -1,4 +1,4 @@
-package curl
+package utils
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ type Request struct {
 	Timeout time.Duration
 }
 
-type Response struct {
+type CurlResponse struct {
 	StatusCode int
 	Headers    http.Header
 	Body       []byte
@@ -29,7 +29,7 @@ func NewRequest() *Request {
 	}
 }
 
-func (r *Request) Send() (*Response, error) {
+func (r *Request) Send() (*CurlResponse, error) {
 	req, err := http.NewRequest(r.Method, r.URL, bytes.NewBuffer(r.Body))
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (r *Request) Send() (*Response, error) {
 		return nil, err
 	}
 
-	return &Response{
+	return &CurlResponse{
 		StatusCode: resp.StatusCode,
 		Headers:    resp.Header,
 		Body:       body,
