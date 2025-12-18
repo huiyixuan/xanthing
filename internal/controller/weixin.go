@@ -7,6 +7,7 @@ import (
 	"time"
 	"xanthing/internal/model"
 	"xanthing/internal/service"
+	"xanthing/internal/utils"
 	"xanthing/pkg/wechat"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +23,7 @@ func (ctl *WeixinCtl) PublicCallback(c *gin.Context) {
 	_ = c.BindQuery(params)
 	official := wechat.Official{}
 	if !official.CheckSign(params) {
-		c.String(400, "fail")
+		utils.BadRequest(c, "签名验证失败")
 		return
 	}
 
@@ -34,12 +35,12 @@ func (ctl *WeixinCtl) PublicCallback(c *gin.Context) {
 			body, err := io.ReadAll(c.Request.Body)
 			fmt.Println(string(body))
 			if err != nil {
-				c.String(400, "error:"+err.Error())
+				utils.BadRequest(c, "读取请求体失败: "+err.Error())
 				return
 			}
 			message, err := official.ParseXml(string(body))
 			if err != nil {
-				c.String(500, "数据解析失败")
+				utils.InternalError(c, "数据解析失败")
 				return
 			}
 
@@ -73,7 +74,7 @@ func (ctl *WeixinCtl) PublicCallback(c *gin.Context) {
 			c.String(200, "success")
 
 		} else {
-			c.String(200, "hello world")
+			utils.Success(c, "hello world")
 		}
 	}
 	return

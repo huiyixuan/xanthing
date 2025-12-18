@@ -1,8 +1,7 @@
 package route
 
 import (
-	"net/http"
-	"xanthing/internal/controller"
+	"xanthing/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,25 +9,22 @@ import (
 func SetRoute(r *gin.Engine) {
 	r.Use(GinRecovery())
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		utils.Success(c, gin.H{
 			"message": "Hello, welcome to x anything",
 		})
 	})
-	weixin := r.Group("/weixin/")
-	{
-		weixinCtl := controller.WeixinCtl{}
-		weixin.Any("/publicCallback", weixinCtl.PublicCallback)
-	}
+
+	// 设置微信相关路由
+	SetWeixinRoutes(r)
+
+	// 设置用户相关路由
+	SetUserRoutes(r)
 }
 func GinRecovery() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
-				c.JSON(http.StatusOK, gin.H{
-					"code": http.StatusInternalServerError,
-					"msg":  "internal error: " + err.(string),
-					"data": map[string]any{},
-				})
+				utils.InternalError(c, "internal error: "+err.(string))
 				c.Abort()
 			}
 		}()
