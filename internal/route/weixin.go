@@ -14,10 +14,10 @@ func SetWeixinRoutes(r *gin.Engine) {
 		weixin.Any("/publicCallback", weixinCtl.PublicCallback)
 	}
 
-	wxmini := r.Group("/wxmini/")
-	{
-		wxminiCtl := controller.WxminiCtl{}
-		wxmini.POST("/wxLogin", wxminiCtl.WxLogin)
-	}
+	//wxmini := r.Group("/wxmini/")
+	//{
+	//	wxminiCtl := controller.WxminiCtl{}
+	//	wxmini.POST("/wxLogin", wxminiCtl.WxLogin)
+	//}
 
 }
